@@ -1,0 +1,3 @@
+name: codebuild_test
+runtime: python
+description: A minimal AWS Python Pulumi program
