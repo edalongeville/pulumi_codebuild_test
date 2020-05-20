@@ -1,3 +1,8 @@
 config:
   aws:region: eu-west-1
-  codebuild:github_token: 0392f1c273bed1fa39f05b8b067945555e5466a6
+  #full control
+  #codebuild:github_token: 4b7758617c916f98fe0b3d01b8b660cdcf7c8c4f
+  #test
+  #codebuild:github_token: 9d363b13f307f4f397c0f768740c61963bfd166b
+  #Permissions: admin:repo_hook, read:packages, repo, write:packages
+  codebuild:github_token: 2af19c3a5c3a98cd95acc79ad64106d6101e4a79

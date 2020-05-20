@@ -5,10 +5,13 @@ from pulumi_aws import s3, iam, codebuild
 config = pulumi.Config("codebuild")
 access_token = config.require("github_token")
 
-example_bucket = s3.Bucket("exampleBucket", acl="private")
+example_bucket = s3.Bucket(
+    resource_name="test-Codebuild-Bucket",
+    acl="private"
+)
 
 example_role = iam.Role(
-    resource_name="exampleRole",
+    resource_name="test_Codebuild_Role",
     assume_role_policy=json.dumps(
         {
             "Version": "2012-10-17",
@@ -45,19 +48,19 @@ jsonPolicy = example_bucket.arn.apply(
 )
 
 codebuild_policy = iam.RolePolicy(
-    "codebuild_policy",
+    resource_name="test_codebuild_policy",
     policy=jsonPolicy,
     role=example_role.name
 )
 # https://github.com/terraform-providers/terraform-provider-aws/issues/7435
 source_credentials = codebuild.SourceCredential(
-    "Github_Credentials",
+    resource_name="test_Github_Credentials",
     auth_type="PERSONAL_ACCESS_TOKEN",
     server_type="GITHUB",
     token=access_token)
 
 project = codebuild.Project(
-    resource_name="CodeBuild_Project",
+    resource_name="test_CodeBuild_Project",
     name="TestProject",
     artifacts={
         "type": "NO_ARTIFACTS",
@@ -83,10 +86,12 @@ project = codebuild.Project(
         "location": "https://github.com/edalongeville/codebuild_test.git",
         "type": "GITHUB",
         "report_build_status": True,
-        "auths": {
-            "type": "OAUTH",
-            "resource": source_credentials.arn,
-        }
+        "auths": [
+            {
+                "type": "OAUTH",
+                "resource": source_credentials.arn,
+            }
+        ]
     },
     logs_config={
         "cloudwatchLogs": {
@@ -101,13 +106,13 @@ project = codebuild.Project(
 )
 
 webhook = codebuild.Webhook(
-    "Codebuild_Webhook",
+    resource_name="test_Codebuild_Webhook",
     filter_groups=[{
         "filter": [
             {
-                "pattern": "PUSH",
-                "type": "EVENT",
-            },
+                   "pattern": "PUSH",
+                   "type": "EVENT",
+                   },
             {
                 "pattern": "master",
                 "type": "HEAD_REF",
