@@ -1,2 +1,3 @@
 config:
   aws:region: eu-west-1
+  codebuild:github_token: 0392f1c273bed1fa39f05b8b067945555e5466a6

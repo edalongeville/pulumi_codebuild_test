@@ -2,6 +2,9 @@ import pulumi
 import json
 from pulumi_aws import s3, iam, codebuild
 
+config = pulumi.Config("codebuild")
+access_token = config.require("github_token")
+
 example_bucket = s3.Bucket("exampleBucket", acl="private")
 
 example_role = iam.Role(
@@ -46,6 +49,12 @@ codebuild_policy = iam.RolePolicy(
     policy=jsonPolicy,
     role=example_role.name
 )
+# https://github.com/terraform-providers/terraform-provider-aws/issues/7435
+source_credentials = codebuild.SourceCredential(
+    "Github_Credentials",
+    auth_type="PERSONAL_ACCESS_TOKEN",
+    server_type="GITHUB",
+    token=access_token)
 
 project = codebuild.Project(
     resource_name="CodeBuild_Project",
@@ -73,6 +82,11 @@ project = codebuild.Project(
         },
         "location": "https://github.com/edalongeville/codebuild_test.git",
         "type": "GITHUB",
+        "report_build_status": True
+        "auths": {
+            "type": "OAUTH",
+            "resource": source_credentials.arn,
+        }
     },
     logs_config={
         "cloudwatchLogs": {
