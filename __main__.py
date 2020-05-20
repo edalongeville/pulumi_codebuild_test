@@ -82,7 +82,7 @@ project = codebuild.Project(
         },
         "location": "https://github.com/edalongeville/codebuild_test.git",
         "type": "GITHUB",
-        "report_build_status": True
+        "report_build_status": True,
         "auths": {
             "type": "OAUTH",
             "resource": source_credentials.arn,
