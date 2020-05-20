@@ -99,3 +99,19 @@ project = codebuild.Project(
         },
     },
 )
+
+webhook = codebuild.Webhook(
+    "Codebuild_Webhook",
+    filter_groups=[{
+        "filter": [
+            {
+                "pattern": "PUSH",
+                "type": "EVENT",
+            },
+            {
+                "pattern": "master",
+                "type": "HEAD_REF",
+            },
+        ],
+    }],
+    project_name=project.name)
