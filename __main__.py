@@ -63,7 +63,8 @@ project = codebuild.Project(
     resource_name="test_CodeBuild_Project",
     name="TestProject",
     artifacts={
-        "type": "NO_ARTIFACTS",
+        "type": "S3",
+        "location": example_bucket.id,
     },
     environment={
         "computeType": "BUILD_GENERAL1_SMALL",
