@@ -1,9 +1,11 @@
 import pulumi
 import json
+import os
 from pulumi_aws import s3, iam, codebuild
 
 config = pulumi.Config("codebuild")
-access_token = config.require("github_token")
+#Tokem requires permissions: admin:repo_hook, read:packages, repo, write:packages
+access_token = os.environ['CODEBUILD_GITHUB_TOKEN']
 
 example_bucket = s3.Bucket(
     resource_name="test-Codebuild-Bucket",

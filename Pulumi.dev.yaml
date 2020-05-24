@@ -1,4 +1,2 @@
 config:
   aws:region: eu-west-1
-  #Permissions: admin:repo_hook, read:packages, repo, write:packages
-  codebuild:github_token: <GITHUB_ACCESS_TOKEN>
