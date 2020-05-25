@@ -4,7 +4,7 @@ import os
 from pulumi_aws import s3, iam, codebuild
 
 config = pulumi.Config("codebuild")
-#Token requires permissions: admin:repo_hook, read:packages, repo, write:packages
+# Token requires permissions: admin:repo_hook, read:packages, repo, write:packages
 access_token = os.environ['CODEBUILD_GITHUB_TOKEN']
 
 example_bucket = s3.Bucket(
@@ -122,4 +122,6 @@ webhook = codebuild.Webhook(
             },
         ],
     }],
-    project_name=project.name)
+    project_name=project.name,
+    # opts=pulumi.ResourceOptions(delete_before_replace=True,),
+)
